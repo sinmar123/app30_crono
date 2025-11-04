@@ -25,6 +25,9 @@ const GanttManager = {
         // Convert tasks to Frappe Gantt format
         const ganttTasks = this.convertToGanttFormat(tasks);
 
+        // Debug log
+        console.log('Tasks da visualizzare nel Gantt:', ganttTasks);
+
         // Clear container
         const container = document.getElementById('gantt-container');
         container.innerHTML = '<svg id="gantt-svg"></svg>';
@@ -69,19 +72,6 @@ const GanttManager = {
         });
 
         return tasks.map(task => {
-            // Parse dependencies
-            let dependencies = '';
-            if (task.dependencies && task.dependencies.trim()) {
-                const depNames = task.dependencies.split(',').map(d => d.trim().toLowerCase());
-                const resolvedDeps = depNames
-                    .map(name => nameToId[name])
-                    .filter(id => id !== undefined);
-
-                if (resolvedDeps.length > 0) {
-                    dependencies = resolvedDeps.join(',');
-                }
-            }
-
             const ganttTask = {
                 id: task.id,
                 name: task.name,
@@ -91,9 +81,27 @@ const GanttManager = {
                 custom_class: task.custom_class || ''
             };
 
-            // Only add dependencies if they exist
-            if (dependencies) {
-                ganttTask.dependencies = dependencies;
+            // Parse dependencies - solo se esistono e non sono vuote
+            if (task.dependencies && typeof task.dependencies === 'string' && task.dependencies.trim() !== '') {
+                const depNames = task.dependencies.split(',')
+                    .map(d => d.trim())
+                    .filter(d => d !== '');
+
+                const resolvedDeps = [];
+
+                for (let depName of depNames) {
+                    const depId = nameToId[depName.toLowerCase()];
+                    if (depId) {
+                        resolvedDeps.push(depId);
+                    } else {
+                        console.warn(`Dipendenza non trovata: "${depName}" per task "${task.name}"`);
+                    }
+                }
+
+                // Aggiungi dependencies SOLO se ci sono dipendenze valide risolte
+                if (resolvedDeps.length > 0) {
+                    ganttTask.dependencies = resolvedDeps.join(',');
+                }
             }
 
             return ganttTask;

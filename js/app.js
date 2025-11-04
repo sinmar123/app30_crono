@@ -172,7 +172,6 @@ const App = {
                     start: formatDate(today),
                     end: formatDate(addDays(today, 30)),
                     progress: 100,
-                    dependencies: '',
                     custom_class: 'bar-complete'
                 },
                 {
@@ -246,7 +245,6 @@ const App = {
                     start: formatDate(today),
                     end: formatDate(addDays(today, 15)),
                     progress: 100,
-                    dependencies: '',
                     custom_class: 'bar-complete'
                 },
                 {
