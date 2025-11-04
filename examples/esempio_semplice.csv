@@ -1,0 +1,7 @@
+Nome,Inizio,Fine,Progresso,Dipendenze
+Analisi requisiti,2024-01-01,2024-01-15,100,
+Design architettura,2024-01-16,2024-01-31,100,Analisi requisiti
+Sviluppo backend,2024-02-01,2024-03-15,75,Design architettura
+Sviluppo frontend,2024-02-15,2024-03-31,60,Design architettura
+Testing,2024-04-01,2024-04-30,20,Sviluppo backend
+Deployment,2024-05-01,2024-05-15,0,Testing

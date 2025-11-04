@@ -1,0 +1,19 @@
+Nome,Inizio,Fine,Progresso,Dipendenze
+Progettazione preliminare,2024-01-01,2024-01-31,100,
+Progettazione definitiva,2024-02-01,2024-02-28,100,Progettazione preliminare
+Autorizzazioni,2024-03-01,2024-03-31,80,Progettazione definitiva
+Preparazione cantiere,2024-04-01,2024-04-15,60,Autorizzazioni
+Scavi e fondazioni,2024-04-16,2024-05-31,40,Preparazione cantiere
+Strutture in elevazione,2024-06-01,2024-08-31,20,Scavi e fondazioni
+Impianto elettrico,2024-09-01,2024-10-15,0,Strutture in elevazione
+Impianto idraulico,2024-09-01,2024-10-15,0,Strutture in elevazione
+Impianto riscaldamento,2024-10-01,2024-11-15,0,Impianto elettrico
+Serramenti esterni,2024-10-16,2024-11-30,0,Strutture in elevazione
+Isolamento termico,2024-11-01,2024-11-30,0,Strutture in elevazione
+Intonaci interni,2024-12-01,2024-12-31,0,Impianto elettrico
+Pavimentazioni,2025-01-01,2025-02-15,0,Intonaci interni
+Rivestimenti bagni,2025-01-15,2025-02-28,0,Impianto idraulico
+Tinteggiature,2025-03-01,2025-03-31,0,Pavimentazioni
+Opere esterne,2025-03-15,2025-04-30,0,Tinteggiature
+Collaudi,2025-05-01,2025-05-15,0,Opere esterne
+Certificazioni,2025-05-16,2025-05-31,0,Collaudi

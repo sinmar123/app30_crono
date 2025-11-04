@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertitore Cronoprogramma a Gantt</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Frappe Gantt CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fas fa-chart-gantt me-2"></i>
+                Convertitore Cronoprogramma a Gantt
+            </span>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Pannello Input -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Importa Cronoprogramma</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tab per diversi metodi di input -->
+                        <ul class="nav nav-tabs mb-3" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="file-tab" data-bs-toggle="tab" data-bs-target="#file-panel" type="button">
+                                    <i class="fas fa-file-excel me-1"></i>File
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual-panel" type="button">
+                                    <i class="fas fa-keyboard me-1"></i>Manuale
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="example-tab" data-bs-toggle="tab" data-bs-target="#example-panel" type="button">
+                                    <i class="fas fa-lightbulb me-1"></i>Esempio
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Import da File -->
+                            <div class="tab-pane fade show active" id="file-panel">
+                                <div class="mb-3">
+                                    <label for="fileInput" class="form-label">Carica file Excel o CSV:</label>
+                                    <input type="file" class="form-control" id="fileInput" accept=".xlsx,.xls,.csv">
+                                    <div class="form-text">Formati supportati: .xlsx, .xls, .csv</div>
+                                </div>
+                            </div>
+
+                            <!-- Input Manuale -->
+                            <div class="tab-pane fade" id="manual-panel">
+                                <div class="mb-3">
+                                    <label for="manualInput" class="form-label">Inserisci dati (formato CSV):</label>
+                                    <textarea class="form-control font-monospace" id="manualInput" rows="10" placeholder="Nome,Inizio,Fine,Progresso,Dipendenze
+Progettazione,2024-01-01,2024-01-15,100,
+Approvazioni,2024-01-16,2024-01-30,50,Progettazione
+Esecuzione lavori,2024-02-01,2024-03-30,20,Approvazioni"></textarea>
+                                    <div class="form-text">
+                                        Formato: Nome,Inizio,Fine,Progresso(%),Dipendenze
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100" id="btnParseManual">
+                                    <i class="fas fa-play me-2"></i>Genera Gantt
+                                </button>
+                            </div>
+
+                            <!-- Esempio -->
+                            <div class="tab-pane fade" id="example-panel">
+                                <p>Carica un esempio di cronoprogramma per progetto edile:</p>
+                                <button class="btn btn-success w-100 mb-2" id="btnLoadExample1">
+                                    <i class="fas fa-building me-2"></i>Progetto Edile Semplice
+                                </button>
+                                <button class="btn btn-success w-100" id="btnLoadExample2">
+                                    <i class="fas fa-city me-2"></i>Progetto Complesso
+                                </button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Opzioni visualizzazione -->
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Visualizzazione:</strong></label>
+                            <select class="form-select" id="viewMode">
+                                <option value="Day">Giorno</option>
+                                <option value="Week" selected>Settimana</option>
+                                <option value="Month">Mese</option>
+                                <option value="Quarter">Trimestre</option>
+                            </select>
+                        </div>
+
+                        <!-- Pulsanti azione -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" id="btnExportExcel">
+                                <i class="fas fa-file-excel me-2"></i>Esporta Excel
+                            </button>
+                            <button class="btn btn-info" id="btnExportPNG">
+                                <i class="fas fa-image me-2"></i>Esporta PNG
+                            </button>
+                            <button class="btn btn-secondary" id="btnClear">
+                                <i class="fas fa-trash me-2"></i>Pulisci
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info attività selezionata -->
+                <div class="card shadow-sm mt-3" id="taskInfoCard" style="display: none;">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Info Attività</h6>
+                    </div>
+                    <div class="card-body" id="taskInfo">
+                        <!-- Dinamico -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pannello Gantt -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-gantt me-2"></i>Diagramma di Gantt</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="gantt-container">
+                            <div class="text-center text-muted py-5">
+                                <i class="fas fa-chart-line fa-3x mb-3"></i>
+                                <p>Carica un cronoprogramma per visualizzare il diagramma di Gantt</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabella dati -->
+                <div class="card shadow-sm mt-3">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="mb-0"><i class="fas fa-table me-2"></i>Dati Attività</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover" id="taskTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Inizio</th>
+                                        <th>Fine</th>
+                                        <th>Durata</th>
+                                        <th>Progresso</th>
+                                        <th>Dipendenze</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Nessun dato disponibile</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-3">
+        <div class="container text-center text-muted">
+            <small>Convertitore Cronoprogramma a Gantt v1.0</small>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="js/parser.js"></script>
+    <script src="js/gantt.js"></script>
+    <script src="js/exporter.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

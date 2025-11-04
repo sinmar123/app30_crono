@@ -1,0 +1,19 @@
+{
+  "name": "crono-gantt-converter",
+  "version": "1.0.0",
+  "description": "Convertitore di cronoprogrammi verticali in diagrammi Gantt interattivi",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "gantt",
+    "cronoprogramma",
+    "planning",
+    "excel",
+    "project-management"
+  ],
+  "author": "",
+  "license": "MIT"
+}
