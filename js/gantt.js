@@ -72,13 +72,13 @@ const GanttManager = {
         });
 
         return tasks.map(task => {
+            // Start with minimal required fields only
             const ganttTask = {
-                id: task.id,
-                name: task.name,
-                start: task.start,
-                end: task.end,
-                progress: task.progress || 0,
-                custom_class: task.custom_class || ''
+                id: String(task.id),
+                name: String(task.name),
+                start: String(task.start),
+                end: String(task.end),
+                progress: Number(task.progress) || 0
             };
 
             // Parse dependencies - solo se esistono e non sono vuote
