@@ -149,13 +149,28 @@ const App = {
      * Load predefined examples
      */
     loadExamples: function() {
+        // Generate dates starting from today
+        const today = new Date();
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        const addDays = (date, days) => {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        };
+
         this.examples = {
             simple: [
                 {
                     id: 'task-1',
                     name: 'Progettazione',
-                    start: '2024-01-01',
-                    end: '2024-01-31',
+                    start: formatDate(today),
+                    end: formatDate(addDays(today, 30)),
                     progress: 100,
                     dependencies: '',
                     custom_class: 'bar-complete'
@@ -163,8 +178,8 @@ const App = {
                 {
                     id: 'task-2',
                     name: 'Approvazioni',
-                    start: '2024-02-01',
-                    end: '2024-02-15',
+                    start: formatDate(addDays(today, 31)),
+                    end: formatDate(addDays(today, 45)),
                     progress: 100,
                     dependencies: 'Progettazione',
                     custom_class: 'bar-complete'
@@ -172,8 +187,8 @@ const App = {
                 {
                     id: 'task-3',
                     name: 'Preparazione cantiere',
-                    start: '2024-02-16',
-                    end: '2024-02-29',
+                    start: formatDate(addDays(today, 46)),
+                    end: formatDate(addDays(today, 60)),
                     progress: 80,
                     dependencies: 'Approvazioni',
                     custom_class: 'bar-in-progress'
@@ -181,8 +196,8 @@ const App = {
                 {
                     id: 'task-4',
                     name: 'Scavi e fondazioni',
-                    start: '2024-03-01',
-                    end: '2024-03-31',
+                    start: formatDate(addDays(today, 61)),
+                    end: formatDate(addDays(today, 90)),
                     progress: 50,
                     dependencies: 'Preparazione cantiere',
                     custom_class: 'bar-in-progress'
@@ -190,8 +205,8 @@ const App = {
                 {
                     id: 'task-5',
                     name: 'Strutture in elevazione',
-                    start: '2024-04-01',
-                    end: '2024-05-31',
+                    start: formatDate(addDays(today, 91)),
+                    end: formatDate(addDays(today, 150)),
                     progress: 0,
                     dependencies: 'Scavi e fondazioni',
                     custom_class: 'bar-not-started'
@@ -199,8 +214,8 @@ const App = {
                 {
                     id: 'task-6',
                     name: 'Impianti',
-                    start: '2024-06-01',
-                    end: '2024-07-15',
+                    start: formatDate(addDays(today, 151)),
+                    end: formatDate(addDays(today, 195)),
                     progress: 0,
                     dependencies: 'Strutture in elevazione',
                     custom_class: 'bar-not-started'
@@ -208,8 +223,8 @@ const App = {
                 {
                     id: 'task-7',
                     name: 'Finiture',
-                    start: '2024-07-16',
-                    end: '2024-08-31',
+                    start: formatDate(addDays(today, 196)),
+                    end: formatDate(addDays(today, 240)),
                     progress: 0,
                     dependencies: 'Impianti',
                     custom_class: 'bar-not-started'
@@ -217,8 +232,8 @@ const App = {
                 {
                     id: 'task-8',
                     name: 'Collaudi',
-                    start: '2024-09-01',
-                    end: '2024-09-15',
+                    start: formatDate(addDays(today, 241)),
+                    end: formatDate(addDays(today, 255)),
                     progress: 0,
                     dependencies: 'Finiture',
                     custom_class: 'bar-not-started'
@@ -228,8 +243,8 @@ const App = {
                 {
                     id: 'task-1',
                     name: 'Fase 1: Progettazione preliminare',
-                    start: '2024-01-01',
-                    end: '2024-01-15',
+                    start: formatDate(today),
+                    end: formatDate(addDays(today, 15)),
                     progress: 100,
                     dependencies: '',
                     custom_class: 'bar-complete'
@@ -237,8 +252,8 @@ const App = {
                 {
                     id: 'task-2',
                     name: 'Fase 1: Progettazione definitiva',
-                    start: '2024-01-16',
-                    end: '2024-02-15',
+                    start: formatDate(addDays(today, 16)),
+                    end: formatDate(addDays(today, 45)),
                     progress: 100,
                     dependencies: 'Fase 1: Progettazione preliminare',
                     custom_class: 'bar-complete'
@@ -246,8 +261,8 @@ const App = {
                 {
                     id: 'task-3',
                     name: 'Fase 1: Progettazione esecutiva',
-                    start: '2024-02-16',
-                    end: '2024-03-15',
+                    start: formatDate(addDays(today, 46)),
+                    end: formatDate(addDays(today, 75)),
                     progress: 100,
                     dependencies: 'Fase 1: Progettazione definitiva',
                     custom_class: 'bar-complete'
@@ -255,8 +270,8 @@ const App = {
                 {
                     id: 'task-4',
                     name: 'Fase 2: Autorizzazioni comunali',
-                    start: '2024-03-16',
-                    end: '2024-04-30',
+                    start: formatDate(addDays(today, 76)),
+                    end: formatDate(addDays(today, 120)),
                     progress: 75,
                     dependencies: 'Fase 1: Progettazione esecutiva',
                     custom_class: 'bar-in-progress'
@@ -264,8 +279,8 @@ const App = {
                 {
                     id: 'task-5',
                     name: 'Fase 2: Autorizzazioni ambientali',
-                    start: '2024-03-16',
-                    end: '2024-05-15',
+                    start: formatDate(addDays(today, 76)),
+                    end: formatDate(addDays(today, 135)),
                     progress: 60,
                     dependencies: 'Fase 1: Progettazione esecutiva',
                     custom_class: 'bar-in-progress'
@@ -273,8 +288,8 @@ const App = {
                 {
                     id: 'task-6',
                     name: 'Fase 3: Allestimento cantiere',
-                    start: '2024-05-01',
-                    end: '2024-05-31',
+                    start: formatDate(addDays(today, 121)),
+                    end: formatDate(addDays(today, 150)),
                     progress: 40,
                     dependencies: 'Fase 2: Autorizzazioni comunali',
                     custom_class: 'bar-in-progress'
@@ -282,154 +297,82 @@ const App = {
                 {
                     id: 'task-7',
                     name: 'Fase 3: Bonifica sito',
-                    start: '2024-06-01',
-                    end: '2024-06-30',
+                    start: formatDate(addDays(today, 151)),
+                    end: formatDate(addDays(today, 180)),
                     progress: 20,
                     dependencies: 'Fase 3: Allestimento cantiere',
                     custom_class: 'bar-in-progress'
                 },
                 {
                     id: 'task-8',
-                    name: 'Fase 4: Demolizioni',
-                    start: '2024-07-01',
-                    end: '2024-07-31',
+                    name: 'Fase 4: Scavi e fondazioni',
+                    start: formatDate(addDays(today, 181)),
+                    end: formatDate(addDays(today, 240)),
                     progress: 0,
                     dependencies: 'Fase 3: Bonifica sito',
                     custom_class: 'bar-not-started'
                 },
                 {
                     id: 'task-9',
-                    name: 'Fase 4: Scavi e sbancamenti',
-                    start: '2024-08-01',
-                    end: '2024-09-15',
+                    name: 'Fase 5: Strutture in elevazione',
+                    start: formatDate(addDays(today, 241)),
+                    end: formatDate(addDays(today, 330)),
                     progress: 0,
-                    dependencies: 'Fase 4: Demolizioni',
+                    dependencies: 'Fase 4: Scavi e fondazioni',
                     custom_class: 'bar-not-started'
                 },
                 {
                     id: 'task-10',
-                    name: 'Fase 5: Fondazioni',
-                    start: '2024-09-16',
-                    end: '2024-11-15',
+                    name: 'Fase 6: Copertura',
+                    start: formatDate(addDays(today, 331)),
+                    end: formatDate(addDays(today, 390)),
                     progress: 0,
-                    dependencies: 'Fase 4: Scavi e sbancamenti',
+                    dependencies: 'Fase 5: Strutture in elevazione',
                     custom_class: 'bar-not-started'
                 },
                 {
                     id: 'task-11',
-                    name: 'Fase 5: Strutture orizzontali piano terra',
-                    start: '2024-11-16',
-                    end: '2024-12-31',
+                    name: 'Fase 6: Impianto elettrico',
+                    start: formatDate(addDays(today, 391)),
+                    end: formatDate(addDays(today, 450)),
                     progress: 0,
-                    dependencies: 'Fase 5: Fondazioni',
+                    dependencies: 'Fase 6: Copertura',
                     custom_class: 'bar-not-started'
                 },
                 {
                     id: 'task-12',
-                    name: 'Fase 5: Strutture verticali piano 1',
-                    start: '2025-01-01',
-                    end: '2025-02-28',
+                    name: 'Fase 6: Impianto idraulico',
+                    start: formatDate(addDays(today, 391)),
+                    end: formatDate(addDays(today, 450)),
                     progress: 0,
-                    dependencies: 'Fase 5: Strutture orizzontali piano terra',
+                    dependencies: 'Fase 6: Copertura',
                     custom_class: 'bar-not-started'
                 },
                 {
                     id: 'task-13',
-                    name: 'Fase 6: Copertura',
-                    start: '2025-03-01',
-                    end: '2025-04-30',
-                    progress: 0,
-                    dependencies: 'Fase 5: Strutture verticali piano 1',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-14',
-                    name: 'Fase 6: Impianto elettrico',
-                    start: '2025-05-01',
-                    end: '2025-06-30',
-                    progress: 0,
-                    dependencies: 'Fase 6: Copertura',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-15',
-                    name: 'Fase 6: Impianto idraulico',
-                    start: '2025-05-01',
-                    end: '2025-06-30',
-                    progress: 0,
-                    dependencies: 'Fase 6: Copertura',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-16',
-                    name: 'Fase 7: Serramenti',
-                    start: '2025-07-01',
-                    end: '2025-08-15',
+                    name: 'Fase 7: Finiture interne',
+                    start: formatDate(addDays(today, 451)),
+                    end: formatDate(addDays(today, 525)),
                     progress: 0,
                     dependencies: 'Fase 6: Impianto elettrico, Fase 6: Impianto idraulico',
                     custom_class: 'bar-not-started'
                 },
                 {
-                    id: 'task-17',
-                    name: 'Fase 7: Intonaci e rasature',
-                    start: '2025-08-16',
-                    end: '2025-09-30',
+                    id: 'task-14',
+                    name: 'Fase 8: Opere esterne',
+                    start: formatDate(addDays(today, 526)),
+                    end: formatDate(addDays(today, 570)),
                     progress: 0,
-                    dependencies: 'Fase 7: Serramenti',
+                    dependencies: 'Fase 7: Finiture interne',
                     custom_class: 'bar-not-started'
                 },
                 {
-                    id: 'task-18',
-                    name: 'Fase 7: Pavimenti e rivestimenti',
-                    start: '2025-10-01',
-                    end: '2025-11-15',
+                    id: 'task-15',
+                    name: 'Fase 9: Collaudi e consegna',
+                    start: formatDate(addDays(today, 571)),
+                    end: formatDate(addDays(today, 600)),
                     progress: 0,
-                    dependencies: 'Fase 7: Intonaci e rasature',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-19',
-                    name: 'Fase 8: Tinteggiature',
-                    start: '2025-11-16',
-                    end: '2025-12-15',
-                    progress: 0,
-                    dependencies: 'Fase 7: Pavimenti e rivestimenti',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-20',
-                    name: 'Fase 8: Sistemazioni esterne',
-                    start: '2025-12-16',
-                    end: '2026-01-31',
-                    progress: 0,
-                    dependencies: 'Fase 8: Tinteggiature',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-21',
-                    name: 'Fase 9: Collaudi impianti',
-                    start: '2026-02-01',
-                    end: '2026-02-15',
-                    progress: 0,
-                    dependencies: 'Fase 8: Sistemazioni esterne',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-22',
-                    name: 'Fase 9: Certificazione energetica',
-                    start: '2026-02-16',
-                    end: '2026-02-28',
-                    progress: 0,
-                    dependencies: 'Fase 9: Collaudi impianti',
-                    custom_class: 'bar-not-started'
-                },
-                {
-                    id: 'task-23',
-                    name: 'Fase 9: Consegna lavori',
-                    start: '2026-03-01',
-                    end: '2026-03-15',
-                    progress: 0,
-                    dependencies: 'Fase 9: Certificazione energetica',
+                    dependencies: 'Fase 8: Opere esterne',
                     custom_class: 'bar-not-started'
                 }
             ]

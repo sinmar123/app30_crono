@@ -70,23 +70,33 @@ const GanttManager = {
 
         return tasks.map(task => {
             // Parse dependencies
-            let dependencies = [];
-            if (task.dependencies) {
+            let dependencies = '';
+            if (task.dependencies && task.dependencies.trim()) {
                 const depNames = task.dependencies.split(',').map(d => d.trim().toLowerCase());
-                dependencies = depNames
+                const resolvedDeps = depNames
                     .map(name => nameToId[name])
                     .filter(id => id !== undefined);
+
+                if (resolvedDeps.length > 0) {
+                    dependencies = resolvedDeps.join(',');
+                }
             }
 
-            return {
+            const ganttTask = {
                 id: task.id,
                 name: task.name,
                 start: task.start,
                 end: task.end,
                 progress: task.progress || 0,
-                dependencies: dependencies.length > 0 ? dependencies.join(',') : '',
                 custom_class: task.custom_class || ''
             };
+
+            // Only add dependencies if they exist
+            if (dependencies) {
+                ganttTask.dependencies = dependencies;
+            }
+
+            return ganttTask;
         });
     },
 
